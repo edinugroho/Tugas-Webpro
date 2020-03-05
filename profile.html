@@ -8,7 +8,58 @@
     <title>Profile | Vietgram</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="css/styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
 </head>
+<script>
+jQuery.ajax({
+  url: 'core/getActiveUser.php',
+  type: 'GET',
+  dataType: 'json',
+  complete: function(xhr, textStatus) {
+    console.log(xhr, textStatus)
+  },
+  success: function(data, textStatus, xhr) {
+    console.log(data)
+    $(".profile__username").html(data.username)
+    $(".profile__full-name").html(data.name)
+    $("#bio").html(data.bio)
+    $("#website").html(data.website)
+  },
+  error: function(xhr, textStatus, errorThrown) {
+    console.log(xhr, textStatus, errorThrown)
+  }
+});
+// show poto
+$.ajax({
+    url: 'core/getFeed.php',
+    type: 'GET',
+    dataType: 'json',
+})
+.done(function(data) {
+    $.each(data, function(i,result) {
+        console.log(result);
+        $(".profile__photos").append(
+            '<div class="profile__photo">'+
+                '<img src="'+result.url+'" />'+
+                '<div class="profile__photo-overlay">'+
+                    '<span class="overlay__item">'+
+                        '<i class="fa fa-heart"></i>'+
+                        '486'+
+                    '</span>'+
+                    '<span class="overlay__item">'+
+                        '<i class="fa fa-comment"></i>'+
+                        '344'+
+                    '</span>'+
+                '</div>'+
+            '</div>'
+        );
+    });
+})
+.fail(function(xhr, textStatus, errorThrown) {
+    console.log(xhr);
+});
+</script>
+</script>
 
 <body>
     <nav class="navigation">
@@ -48,7 +99,8 @@
             </div>
             <div class="profile__column">
                 <div class="profile__title">
-                    <h3 class="profile__username">serranoarevalo</h3>
+                    <h3 class="profile__username"></h3>
+                    <a href="add-photo.html">Add Photo</a>
                     <a href="edit-profile.html">Edit profile</a>
                     <i class="fa fa-cog fa-lg"></i>
                 </div>
@@ -64,68 +116,14 @@
                     </li>
                 </ul>
                 <p class="profile__bio">
-                    <span class="profile__full-name">
-                        Nicolás Serrano Arévalo
-                    </span> Doing whatever and eating Pho Lorem ipsum dolor sit amet consectetur, adipisicing
-                    elit. Ducimus suscipit praesentium eveniet quibusdam ipsam omnis fugit. Tempore voluptates ratione recusandae
-                    natus illo perspiciatis suscipit, odio consequuntur quasi obcaecati minus! Omnis.
-                    <a href="#">serranoarevalo.com</a>
+                    <span class="profile__full-name"></span> 
+                    <span id="bio"></span>
+                    <a href="#" id="website"></a>
                 </p>
             </div>
         </header>
         <section class="profile__photos">
-            <div class="profile__photo">
-                <img src="images/feedPhoto.jpg" />
-                <div class="profile__photo-overlay">
-                    <span class="overlay__item">
-                        <i class="fa fa-heart"></i>
-                        486
-                    </span>
-                    <span class="overlay__item">
-                        <i class="fa fa-comment"></i>
-                        344
-                    </span>
-                </div>
-            </div>
-            <div class="profile__photo">
-                <img src="images/feedPhoto.jpg" />
-                <div class="profile__photo-overlay">
-                    <span class="overlay__item">
-                            <i class="fa fa-heart"></i>
-                            486
-                        </span>
-                    <span class="overlay__item">
-                            <i class="fa fa-comment"></i>
-                            344
-                        </span>
-                </div>
-            </div>
-            <div class="profile__photo">
-                <img src="images/feedPhoto.jpg" />
-                <div class="profile__photo-overlay">
-                    <span class="overlay__item">
-                                <i class="fa fa-heart"></i>
-                                486
-                            </span>
-                    <span class="overlay__item">
-                                <i class="fa fa-comment"></i>
-                                344
-                            </span>
-                </div>
-            </div>
-            <div class="profile__photo">
-                <img src="images/feedPhoto.jpg" />
-                <div class="profile__photo-overlay">
-                    <span class="overlay__item">
-                                    <i class="fa fa-heart"></i>
-                                    486
-                                </span>
-                    <span class="overlay__item">
-                                    <i class="fa fa-comment"></i>
-                                    344
-                                </span>
-                </div>
-            </div>
+            
         </section>
     </main>
     <footer class="footer">

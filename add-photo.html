@@ -10,6 +10,13 @@
     <link rel="stylesheet" href="css/styles.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
 </head>
+<style>
+#image-preview{
+    display:none;
+    width : 250px;
+    height : 300px;
+}
+</style>
 <script>
 jQuery.ajax({
   url: 'core/getActiveUser.php',
@@ -74,39 +81,19 @@ jQuery.ajax({
                 </div>
                 <h4 class="edit-profile__username">serranoarevalo</h4>
             </header>
-            <form action="" method="post" class="edit-profile__form">
+            <form action="" method="post" class="edit-profile__form" enctype="multipart/form-data">
                 <input type="hidden" id="id">
                 <div class="form__row">
-                    <label for="full-name" class="form__label">Name:</label>
-                    <input id="full-name" name="fullName" type="text" class="form__input" />
+                    <label for="caption" class="form__label">Caption:</label>
+                    <textarea name="caption" id="caption"></textarea>
                 </div>
                 <div class="form__row">
-                    <label for="user-name" class="form__label">Username:</label>
-                    <input id="user-name" name="username" type="text" class="form__input" />
+                    <label for="photo" class="form__label">Photo:</label>
+                    <input type="file" id="image-source" name="photo" onchange="previewImage();"/>
                 </div>
                 <div class="form__row">
-                    <label for="website" class="form__label">Website:</label>
-                    <input id="website" name="url" type="text" class="form__input" />
-                </div>
-                <div class="form__row">
-                    <label for="bio" class="form__label">Bio:</label>
-                    <textarea name="bio" id="bio"></textarea>
-                </div>
-                <div class="form__row">
-                    <label for="email" class="form__label">Email:</label>
-                    <input id="email" name="email" type="email" class="form__input" />
-                </div>
-                <div class="form__row">
-                    <label for="phone" class="form__label">Phone Number:</label>
-                    <input id="phone" name="phone" type="tel" class="form__input" />
-                </div>
-                <div class="form__row">
-                    <label for="gender" class="form__label">Gender:</label>
-                    <select name="gender" id="gender">
-                        <option value="male">Male</option>
-                        <option value="female">Female</option>
-                        <option value="cant">Can't remember</option>
-                    </select>
+                    <label for="preview" id="preview" class="form__label"></label>
+                    <img id="image-preview" alt="image preview"/>
                 </div>
                 <input type="submit" id="submit" name="submit" value="Submit">
             </form>
@@ -135,28 +122,25 @@ jQuery.ajax({
     </footer>
 </body>
 <script>
+function previewImage() {
+    document.getElementById("image-preview").style.display = "block";
+    var oFReader = new FileReader();
+        oFReader.readAsDataURL(document.getElementById("image-source").files[0]);
+    oFReader.onload = function(oFREvent) {
+        document.getElementById("image-preview").src = oFREvent.target.result;
+    };
+    $("#preview").text('Preview:');
+};
 $("#submit").click(function(e) {
     e.preventDefault();
     var id = $("#id").val();
-    var name = $("#full-name").val();
-    var username = $("#user-name").val();
-    var website = $("#website").val();
-    var bio = $("#bio").val();
-    var email = $("#email").val();
-    var phone = $("#phone").val();
-    var gender = $("#gender").val();
+    var caption = $("#caption").val();
     jQuery.ajax({
-        url: 'core/editProfile.php',
+        url: 'core/addPhoto.php',
         type: 'post',
         data: {
             id : id,
-            name : name,
-            username : username,
-            website : website,
-            bio : bio,
-            email : email,
-            phone : phone,
-            gender : gender
+            caption : caption,
         },
     })
     .done(function(data) {

@@ -8,8 +8,56 @@
     <title>Feed | Vietgram</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="css/styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
 </head>
-
+<script>
+    $.ajax({
+        url: 'core/getFeed.php',
+        type: 'GET',
+        dataType: 'json',
+    })
+    .done(function(data) {
+        $.each(data, function(i,result) {
+            console.log(result);
+            $("#feed").append(
+                '<div class="photo">'+
+                    '<header class="photo__header">'+
+                        '<img src="images/avatar.jpg" class="photo__avatar" />'+
+                        '<div class="photo__user-info">'+
+                            '<span class="photo__author">'+ result.url +'</span>'+
+                            '<span class="photo__location">Bestechung</span>'+
+                        '</div>'+
+                    '</header>'+
+                    '<img src="'+result.url+'" />'+
+                    '<div class="photo__info">'+
+                        '<div class="photo__actions">'+
+                            '<span class="photo__action">'+
+                                '<i class="fa fa-heart-o fa-lg"></i>'+
+                            '</span>'+
+                            '<span class="photo__action">'+
+                                '<i class="fa fa-comment-o fa-lg"></i>'+
+                            '</span>'+
+                        '</div>'+
+                        '<span class="photo__likes">'+result.like+' likes</span>'+
+                        '<ul class="photo__comments">'+
+                            '<li class="photo__comment">'+
+                                '<span class="photo__comment-author">serranoarevalo </span>'+result.caption+
+                            '</li>'+
+                        '</ul>'+
+                        '<span class="photo__time-ago">2 hours ago</span>'+
+                        '<div class="photo__add-comment-container">'+
+                            '<textarea name="comment" placeholder="Add a comment..."></textarea>'+
+                            '<i class="fa fa-ellipsis-h"></i>'+
+                        '</div>'+
+                    '</div>'+
+                '</div>'
+            );
+        });
+    })
+    .fail(function(xhr, textStatus, errorThrown) {
+        console.log(xhr);
+    });
+</script>
 <body>
     <nav class="navigation">
         <div class="navigation__column">
@@ -20,7 +68,9 @@
         </div>
         <div class="navigation__column">
             <i class="fa fa-search"></i>
-            <input type="text" placeholder="Search">
+            <!-- <form action="" method="post"> -->
+            <input type="text" id="search" name="search" placeholder="Search" onchange="searchCaption()">
+            <!-- </form> -->
         </div>
         <div class="navigation__column">
             <ul class="navigations__links">
@@ -43,86 +93,6 @@
         </div>
     </nav>
     <main id="feed">
-        <div class="photo">
-            <header class="photo__header">
-                <img src="images/avatar.jpg" class="photo__avatar" />
-                <div class="photo__user-info">
-                    <span class="photo__author">inthetiger</span>
-                    <span class="photo__location">Bestechung</span>
-                </div>
-            </header>
-            <img src="images/feedPhoto.jpg" />
-            <div class="photo__info">
-                <div class="photo__actions">
-                    <span class="photo__action">
-                        <i class="fa fa-heart-o fa-lg"></i>
-                    </span>
-                    <span class="photo__action">
-                        <i class="fa fa-comment-o fa-lg"></i>
-                    </span>
-                </div>
-                <span class="photo__likes">45 likes</span>
-                <ul class="photo__comments">
-                    <li class="photo__comment">
-                        <span class="photo__comment-author">serranoarevalo</span> love this!
-                    </li>
-                    <li class="photo__comment">
-                        <span class="photo__comment-author">serranoarevalo</span> love this!
-                    </li>
-                    <li class="photo__comment">
-                        <span class="photo__comment-author">serranoarevalo</span> love this!
-                    </li>
-                    <li class="photo__comment">
-                        <span class="photo__comment-author">serranoarevalo</span> love this!
-                    </li>
-                </ul>
-                <span class="photo__time-ago">2 hours ago</span>
-                <div class="photo__add-comment-container">
-                    <textarea name="comment" placeholder="Add a comment..."></textarea>
-                    <i class="fa fa-ellipsis-h"></i>
-                </div>
-            </div>
-        </div>
-        <div class="photo">
-            <header class="photo__header">
-                <img src="images/avatar.jpg" class="photo__avatar" />
-                <div class="photo__user-info">
-                    <span class="photo__author">inthetiger</span>
-                    <span class="photo__location">Bestechung</span>
-                </div>
-            </header>
-            <img src="images/feedPhoto.jpg" />
-            <div class="photo__info">
-                <div class="photo__actions">
-                    <span class="photo__action">
-                            <i class="fa fa-heart-o fa-lg"></i>
-                        </span>
-                    <span class="photo__action">
-                            <i class="fa fa-comment-o fa-lg"></i>
-                        </span>
-                </div>
-                <span class="photo__likes">45 likes</span>
-                <ul class="photo__comments">
-                    <li class="photo__comment">
-                        <span class="photo__comment-author">serranoarevalo</span> love this!
-                    </li>
-                    <li class="photo__comment">
-                        <span class="photo__comment-author">serranoarevalo</span> love this!
-                    </li>
-                    <li class="photo__comment">
-                        <span class="photo__comment-author">serranoarevalo</span> love this!
-                    </li>
-                    <li class="photo__comment">
-                        <span class="photo__comment-author">serranoarevalo</span> love this!
-                    </li>
-                </ul>
-                <span class="photo__time-ago">2 hours ago</span>
-                <div class="photo__add-comment-container">
-                    <textarea name="comment" placeholder="Add a comment..."></textarea>
-                    <i class="fa fa-ellipsis-h"></i>
-                </div>
-            </div>
-        </div>
     </main>
     <footer class="footer">
         <div class="footer__column">
@@ -146,5 +116,72 @@
         </div>
     </footer>
 </body>
-
+<script>
+function searchCaption () {
+    var q = $("#search").val();
+    if (q === ""){
+        location.reload();
+    }else{
+        $.ajax({
+            url: 'core/searchPhoto.php',
+            type: 'get',
+            dataType : 'json',
+            data: {
+                search : q
+            },
+            beforeSend :function() {
+                $("#feed").hide();
+            },
+            success : function() {
+                $("#feed").show();
+            }
+        })
+        .done(function(data) {
+            if (data.length==0) {
+                $("#feed").text("data tidak ditemukan");
+            }else{
+                $.each(data, function(i,result) {
+                    console.log(result);
+                    $("#feed").html(
+                        '<div class="photo">'+
+                            '<header class="photo__header">'+
+                                '<img src="images/avatar.jpg" class="photo__avatar" />'+
+                                '<div class="photo__user-info">'+
+                                    '<span class="photo__author">'+ result.url +'</span>'+
+                                    '<span class="photo__location">Bestechung</span>'+
+                                '</div>'+
+                            '</header>'+
+                            '<img src="'+result.url+'" />'+
+                            '<div class="photo__info">'+
+                                '<div class="photo__actions">'+
+                                    '<span class="photo__action">'+
+                                        '<i class="fa fa-heart-o fa-lg"></i>'+
+                                    '</span>'+
+                                    '<span class="photo__action">'+
+                                        '<i class="fa fa-comment-o fa-lg"></i>'+
+                                    '</span>'+
+                                '</div>'+
+                                '<span class="photo__likes">'+result.like+' likes</span>'+
+                                '<ul class="photo__comments">'+
+                                    '<li class="photo__comment">'+
+                                        '<span class="photo__comment-author">serranoarevalo </span>'+result.caption+
+                                    '</li>'+
+                                '</ul>'+
+                                '<span class="photo__time-ago">2 hours ago</span>'+
+                                '<div class="photo__add-comment-container">'+
+                                    '<textarea name="comment" placeholder="Add a comment..."></textarea>'+
+                                    '<i class="fa fa-ellipsis-h"></i>'+
+                                '</div>'+
+                            '</div>'+
+                        '</div>'
+                    );
+                });
+            }
+        })
+        .fail(function() {
+            console.log('error')
+        });
+    }
+}
+</script>
 </html>

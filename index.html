@@ -8,6 +8,7 @@
         <meta name="description" content="Vietgram, like Instagram but with Pho" />
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="css/styles.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
     </head>
     <body>
         <main id="login">
@@ -17,16 +18,17 @@
             <div class="login__column">
                 <div class="login__box">
                     <img src="images/loginLogo.png" class="login__logo" />
-                    <form action="feed.html" method="get" class="login__form">
-                        <input type="text" name="username" placeholder="Username" required />
-                        <input type="password" name="password" placeholder="Password" required />
-                        <input type="submit" value="Log in" />
+                    <form action="" method="post" class="login__form">
+                        <input type="text" id="username" name="username" placeholder="Username" required />
+                        <input type="password" id="password" name="password" placeholder="Password" required />
+                        <input type="submit" id="submit" name="submit" value="Log in" />
                     </form>
                     <span class="login__divider">or</span>
                     <a href="#" class="login__link">
                         <i class="fa fa-money"></i>
                         Log in with Facebook
-                    </a>
+                    </a><br>
+                    <p id="status" style="color: red"></p>
                     <a href="#" class="login__link login__link--small">Forgot password</a>
                 </div>
                 <div class="login__box">
@@ -63,4 +65,34 @@
             </div>
         </footer>
     </body>
+<script>
+    $('#submit').click(function(e) {
+        e.preventDefault();
+        var username = $('#username').val()
+        var password = $('#password').val()
+        jQuery.ajax({
+            url: 'core/loginAction.php',
+            type: 'post',
+            data: {
+                username : username,
+                password : password
+            },
+        })
+        .done(function(data) {
+            console.log(data);
+            if (data == 'error') {
+                $("#status").text("username atau password tidak ditemukan");
+            }else if(data == 'empty'){
+                $("#status").text('Username atau Password tidak boleh kosong');
+            }else{
+                console.log("success");
+                window.location.href = "feed.html";
+            }
+        })
+        .fail(function() {
+            console.log("error");
+        });
+    });
+
+</script>
 </html>
