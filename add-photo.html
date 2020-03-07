@@ -17,30 +17,6 @@
     height : 300px;
 }
 </style>
-<script>
-jQuery.ajax({
-  url: 'core/getActiveUser.php',
-  type: 'GET',
-  dataType: 'json',
-  complete: function(xhr, textStatus) {
-    console.log(xhr, textStatus)
-  },
-  success: function(data, textStatus, xhr) {
-    $(".edit-profile__username").html(data.name)
-    $("#id").val(data.id_profile)
-    $("#full-name").val(data.name)
-    $("#user-name").val(data.username)
-    $("#website").val(data.website)
-    $("#bio").val(data.bio)
-    $("#email").val(data.email)
-    $("#phone").val(data.phone_number)
-    $("#gender").val(data.gender)
-  },
-  error: function(xhr, textStatus, errorThrown) {
-    console.log(xhr, textStatus, errorThrown)
-  }
-});
-</script>
 
 <body>
     <nav class="navigation">
@@ -81,15 +57,15 @@ jQuery.ajax({
                 </div>
                 <h4 class="edit-profile__username">serranoarevalo</h4>
             </header>
-            <form action="" method="post" class="edit-profile__form" enctype="multipart/form-data">
-                <input type="hidden" id="id">
+            <form action="addPhoto.php" method="post" class="edit-profile__form" enctype="multipart/form-data">
+                <input type="hidden" id="id" value="1">
                 <div class="form__row">
                     <label for="caption" class="form__label">Caption:</label>
                     <textarea name="caption" id="caption"></textarea>
                 </div>
                 <div class="form__row">
                     <label for="photo" class="form__label">Photo:</label>
-                    <input type="file" id="image-source" name="photo" onchange="previewImage();"/>
+                    <input type="file" id="image-source" name="file" onchange="previewImage();"/>
                 </div>
                 <div class="form__row">
                     <label for="preview" id="preview" class="form__label"></label>
@@ -122,6 +98,32 @@ jQuery.ajax({
     </footer>
 </body>
 <script>
+jQuery.ajax({
+  url: 'core/getActiveUser.php',
+  type: 'GET',
+  dataType: 'json',
+  complete: function(xhr, textStatus) {
+    console.log(xhr, textStatus)
+  },
+  success: function(data, textStatus, xhr) {
+    $(".edit-profile__username").html(data.name)
+    // $("#id").val(data.id_profile)
+    $("#id").val(data.id_profile);
+    $("#caption").val("sda");
+    $("#full-name").val(data.name)
+    $("#user-name").val(data.username)
+    $("#website").val(data.website)
+    $("#bio").val(data.bio)
+    $("#email").val(data.email)
+    $("#phone").val(data.phone_number)
+    $("#gender").val(data.gender)
+  },
+  error: function(xhr, textStatus, errorThrown) {
+    console.log(xhr, textStatus, errorThrown)
+  }
+});
+</script>
+<script>
 function previewImage() {
     document.getElementById("image-preview").style.display = "block";
     var oFReader = new FileReader();
@@ -131,31 +133,31 @@ function previewImage() {
     };
     $("#preview").text('Preview:');
 };
-$("#submit").click(function(e) {
-    e.preventDefault();
-    var id = $("#id").val();
-    var caption = $("#caption").val();
-    jQuery.ajax({
-        url: 'core/addPhoto.php',
-        type: 'post',
-        data: {
-            id : id,
-            caption : caption,
-        },
-    })
-    .done(function(data) {
-        console.log(data);
-        if (data == "error") {
-            alert("Terjadi Kesalahan Edit Profile");
-        }else{
-            alert("Berhasil Edit Profile");
-        }
-        location.reload();
-    })
-    .fail(function() {
-        console.log("error");
-    });
+// $("#submit").click(function(e) {
+//     e.preventDefault();
+//     var id = $("#id").val();
+//     var caption = $("#caption").val();
+//     jQuery.ajax({
+//         url: 'core/addPhoto.php',
+//         type: 'post',
+//         data: {
+//             id : id,
+//             caption : caption,
+//         },
+//     })
+//     .done(function(data) {
+//         console.log(data);
+//         if (data == "error") {
+//             // alert("Terjadi Kesalahan Edit Profile");
+//         }else{
+//             // alert("Berhasil Edit Profile");
+//         }
+//         location.reload();
+//     })
+//     .fail(function() {
+//         console.log("error");
+//     });
     
-});
+// });
 </script>
 </html>
