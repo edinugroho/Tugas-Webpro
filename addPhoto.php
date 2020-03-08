@@ -45,13 +45,13 @@ if (mysqli_connect_errno())
 // INSERT INTO `photo`(`url`, `caption`, `like`, `id_profile`) VALUES ([value-1],[value-2],[value-3],[value-4],[value-5])
 $sql = "INSERT INTO `photo`(`id_photo`, `url`, `caption`, `like`, `id_profile`) VALUES (NULL, '$target_file','$caption',1,'$id')";
 if ($conn->query($sql) === TRUE) {
-    echo "New record created successfully";
+    // echo "New record created successfully";
     // $_SESSION["valid"] = 1;
-    // header("Location: formdaftar.php?success");
+    header("Location: feed.html");
 } else {
     echo "Error: " . $sql . "<br>" . $conn->error;
     // $_SESSION["valid"] = 2;
-    // header("Location: formdaftar.php?failed");
+    header("Location: add-photo.php");
 }
 
 $conn->close();
